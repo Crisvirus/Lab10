@@ -11,13 +11,13 @@
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
 		<!-- include jQuery -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-		
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>IoT Template</title>
     </head>
     <body>
     	<script src="js/Chart.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <div id="app">
             <div id="side-menu">
 				<ul>
@@ -59,6 +59,16 @@
 					    <i class="fa fa-cog"></i> Settings
 					  </a>
 					</li>
+					<li>
+					  <a href="#map">
+					    <i class="fa fa-map-o"></i> Map
+					  </a>
+					</li>
+					<li>
+					  <a href="#acc">
+					    <i class="fa fa-tachometer"></i> Accelerometer
+					  </a>
+					</li>
 					
 
 
@@ -87,6 +97,7 @@
 				<div data-role="page" id="images">
 					Images
 					<button class="btn raised " id="butt3">TAKE PICTURE</button>
+					<div id="image"></div>
 				</div>
 				<div data-role="page" id="sensors">
 					Sensors
@@ -106,6 +117,15 @@
 						<br>
 						<button class="btn raised " id="butt2">Save</button>
 					</div>
+				</div>
+				<div data-role="page" id="map">
+					Map
+					<div id="map"></div>
+				</div>
+				<div data-role="page" id="acc">
+					Accelerometer
+					<canvas id="acChart" width="320" height="320">
+					</canvas>
 				</div>
 				<div data-role="page" id="templates">
 					Templates
@@ -136,7 +156,6 @@
         <script type="text/javascript">
             app.initialize();
         </script>
-        
     </body>
 </html>
 

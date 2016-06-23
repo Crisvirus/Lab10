@@ -17,9 +17,6 @@
  * under the License.
  */
 var iter=9;
-var cameraOptions={
-	quality: 100
-};
 var test_news=[
 	{
 		pk:"1",
@@ -72,6 +69,7 @@ var app = {
 		this.updateNews();
 		this.makeChart();
 		this.getSettings();
+		this.getACC();
 		//this.setStatusbar();
 		
 		
@@ -83,15 +81,16 @@ var app = {
     bindEvents: function() {
     	setInterval(app.updateNews, 5000);
     	setInterval(app.chatGet, 1000);
+    	setInterval(app.updateMap, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
     	// },5000);
     	$("#chat_controls>#butt1").click(app.chatSend);
     	$("#colorsett>#butt2").click(app.colorSet);
-    	$("#images>#butt3").click(app.Picture);
+    	$("#images>#butt3").click(app.Photo);
         document.addEventListener('deviceready', this.onDeviceReady, false);
 		window.addEventListener('hashchange', this.hashChange, false);
-		window.addEventListener("batterystatus", onBatteryStatus, false);
+		//window.addEventListener("batterystatus", onBatteryStatus, false);
     },
     // deviceready Event Handler
     //
@@ -99,7 +98,6 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        console.log(navigator.camera);
     },
 	//events on hash/location change
 	hashChange: function(){
@@ -118,16 +116,16 @@ var app = {
 		}
 	},
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    // receivedEvent: function(id) {
+    //     var parentElement = document.getElementById(id);
+    //     var listeningElement = parentElement.querySelector('.listening');
+    //     var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+    //     listeningElement.setAttribute('style', 'display:none;');
+    //     receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
-    },
+    //     console.log('Received Event: ' + id);
+    // },
 	showPage: function(id){
 		if( document.getElementById(id).getAttribute("data-role") == "page"){
 			$("*[data-role=page]").hide();
@@ -265,37 +263,81 @@ var app = {
 		var col=localStorage.getItem('BGC');
 		$("body").css("backgroundColor", col);
 	},
-	Picture: function(){
+	Photo: function(){
 		//alert("Buton apasat");
-		alert('start camera');
-		navigator.camera.getPicture(
-			function(uri){
-				alert(uri);
-			},
-			function(msg){
-				alert(msg);
-			},
-			{
-				quality: 50,
-    			destinationType: Camera.DestinationType.FILE_URI
-    		}
-    	);
+		alert(navigator.camera);
+		navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+	    destinationType: Camera.DestinationType.FILE_URI });
+
+	function onSuccess(imageURI) {
+	   	$("#image").append("<img>"+imageURI+"</img>");
+	}
+
+	function onFail(message) {
+	    alert('Failed because: ' + message);
+	}
 	},
-	// setStatusbar: function(){
-	// 	StatusBar.backgroundColorByHexString("#ffffff");
-	// }
+	updateMap: function()
+	{
+		if (navigator.geolocation) 
+		{
+        	navigator.geolocation.getCurrentPosition(showPosition);
+    	}
+    	function showPosition(pozi)
+    	{
+    		console.log(aici);
+    		var latlon = pozi.coords.latitude + "," + pozi.coords.longitude;
+			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+			$("#map").append("");
+			$("#map").append("<img>"+img_url+"</img>");
+    	}
+	},
+	getACC: function()
+	{
+		var ctx = $("#acChart");
+		var mychart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		        labels: ["0"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: date,
+		            backgroundColor: [
+		                'rgba(0, 0,0, 0.3)',
+		            ],
+		            borderColor: [
+		                'rgba(0,0,0,1)',
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+		});
+		setInterval(function(){
+			//app.addData();
+			navigator.accelerometer.watchAcceleration(function(datele)
+			{
+				++iter;
+				//var a=Math.floor(Math.random()*100);
+				//mychart.data.datasets[0].data.push(a);
+				mychart.data.labels.push(iter);
+				mychart.data.labels=mychart.data.labels.slice(-10);
+				//mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
+				mychart.data.datasets[0].data.push(datele.z);
+				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
+				mychart.update();
+				//console.log(datele);
+			},function(){},{ frequency: 1000 });
+		}, 1000);
+	}
 	
 };
 
-function onBatteryStatus(info) {
-   	$("#batt").append("Level: " + info.level + " isPlugged: " + info.isPlugged);
-    //console.log("Level: " + info.level + " isPlugged: " + info.isPlugged);
-}
-function onSuccess(imageURI) {
-    var image = document.getElementById('myImage');
-    image.src = imageURI;
-}
-
-function onFail(message) {
-    alert('Failed because: ' + message);
-}

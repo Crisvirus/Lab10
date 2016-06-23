@@ -28,7 +28,9 @@ body {
 #app.show{
 	left:0px;
 }
-
+#map {
+        height: 100%;
+}
 #side-menu{
 	float:left;
 	width:200px;

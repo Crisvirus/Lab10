@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 44.426814, lng: 26.102452},
+          zoom: 11
+        });
+        var marker = new google.maps.Marker({
+          position: {lat:44.44577,lng:25.96966},
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+        var marker = new google.maps.Marker({
+          position: {lat:44.336735,lng:25.965965},
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+        var marker = new google.maps.Marker({
+          position: {lat:44.176857,lng:25.927},
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+        var marker = new google.maps.Marker({
+          position: {lat:44.474495,lng:25.804914},
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+        var marker = new google.maps.Marker({
+          position: {lat:44.290497,lng:26.047882},
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ&callback=initMap"
+    async defer></script>
+  </body>
+</html>
