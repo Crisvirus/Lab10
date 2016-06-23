@@ -70,6 +70,7 @@ var app = {
 		this.makeChart();
 		this.getSettings();
 		this.getACC();
+
 		//this.setStatusbar();
 		
 		
@@ -79,9 +80,8 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-    	setInterval(app.updateNews, 5000);
+    	setInterval(app.updateMap, 5000);
     	setInterval(app.chatGet, 1000);
-    	setInterval(app.updateMap, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
     	// },5000);
@@ -279,15 +279,14 @@ var app = {
 	},
 	updateMap: function()
 	{
-		if (navigator.geolocation) 
-		{
-        	navigator.geolocation.getCurrentPosition(showPosition);
-    	}
+		//console.log("Aici");
+        navigator.geolocation.getCurrentPosition(showPosition);
     	function showPosition(pozi)
     	{
     		console.log(aici);
     		var latlon = pozi.coords.latitude + "," + pozi.coords.longitude;
-			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=300x300&sensor=false";
+			console.log(img_url);
 			$("#map").append("");
 			$("#map").append("<img>"+img_url+"</img>");
     	}
@@ -300,7 +299,7 @@ var app = {
 		    data: {
 		        labels: ["0"],
 		        datasets: [{
-		            label: '# of Votes',
+		            label: 'Acceleraion on Z',
 		            data: date,
 		            backgroundColor: [
 		                'rgba(0, 0,0, 0.3)',
@@ -329,14 +328,14 @@ var app = {
 				//var a=Math.floor(Math.random()*100);
 				//mychart.data.datasets[0].data.push(a);
 				mychart.data.labels.push(iter);
-				mychart.data.labels=mychart.data.labels.slice(-10);
+				mychart.data.labels=mychart.data.labels.slice(-500);
 				//mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
 				mychart.data.datasets[0].data.push(datele.z);
-				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
+				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-500);
 				mychart.update();
 				//console.log(datele);
-			},function(){},{ frequency: 1000 });
-		}, 1000);
+			},function(){},{ frequency: 100 });
+		}, 100);
 	}
 	
 };
