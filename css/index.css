@@ -272,3 +272,45 @@ div.mesaj .content img{
 	width:100%;
 	height:auto;
 }
+div.weathercard{
+	background:white;
+	border-radius:2px;
+	margin:8px;
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+	-moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+}
+
+div.weathercard .img-container{
+	width:100%;
+	margin:0;
+	padding:0;
+	display: inline-block;
+	position: relative;
+	overflow:hidden;
+}
+div.weathercard .img-container:after{
+	padding-top: 56.25%;
+	/* 16:9 ratio */
+	display: block;
+	content: '';
+}
+div.weathercard .img-container img{
+	width:100%;
+	height:auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+div.weathercard .title{
+	margin: 24px 16px 0 16px;
+}
+div.weathercard .content{
+	margin: 8px 16px 16px 16px;
+}
+div.weathercard .content img{
+	width:100%;
+	height:auto;
+}

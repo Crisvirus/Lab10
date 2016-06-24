@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
 		<!-- include jQuery -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://www.google.com/jsapi"></script>
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>IoT Template</title>
     </head>
@@ -67,6 +68,11 @@
 					<li>
 					  <a href="#acc">
 					    <i class="fa fa-tachometer"></i> Accelerometer
+					  </a>
+					</li>
+					<li>
+					  <a href="#wea">
+					    <i class="fa fa-sun-o"></i> Weather
 					  </a>
 					</li>
 					
@@ -127,6 +133,13 @@
 					<canvas id="acChart" width="320" height="320">
 					</canvas>
 				</div>
+				<div data-role="page" id="wea">
+					<h1>Weather</h1>
+					<br>
+					Enter city
+					<input type="text" id="city">
+					<button class="btn raised " id="buttcity">Search</button>
+				</div>
 				<div data-role="page" id="templates">
 					Templates
 					<div class="card">
@@ -143,6 +156,15 @@
 						</footer>
 					</div>
 					<div class="mesaj">
+						<h3 class="title">Title</h3>
+						<div class="content">
+							<p>Short Description of article lorem ipsum ...</p>
+						</div>
+					</div>
+					<div class="weathercard">
+						<div class="img-container">
+							<img src="http://www.nnergix.com/sites/default/files/styles/medium/public/field/image-product/weather-forecast_0.jpg?itok=FmPPJ2_-">
+						</div>
 						<h3 class="title">Title</h3>
 						<div class="content">
 							<p>Short Description of article lorem ipsum ...</p>

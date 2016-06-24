@@ -17,6 +17,8 @@
  * under the License.
  */
 var iter=9;
+var imageSearch;
+google.load('search', '1');
 var test_news=[
 	{
 		pk:"1",
@@ -70,6 +72,7 @@ var app = {
 		this.makeChart();
 		this.getSettings();
 		this.getACC();
+		//this.getWeather();
 
 		//this.setStatusbar();
 		
@@ -88,6 +91,7 @@ var app = {
     	$("#chat_controls>#butt1").click(app.chatSend);
     	$("#colorsett>#butt2").click(app.colorSet);
     	$("#images>#butt3").click(app.Photo);
+    	$("#wea>#buttcity").click(app.getWeather);
         document.addEventListener('deviceready', this.onDeviceReady, false);
 		window.addEventListener('hashchange', this.hashChange, false);
 		//window.addEventListener("batterystatus", onBatteryStatus, false);
@@ -328,14 +332,39 @@ var app = {
 				//var a=Math.floor(Math.random()*100);
 				//mychart.data.datasets[0].data.push(a);
 				mychart.data.labels.push(iter);
-				mychart.data.labels=mychart.data.labels.slice(-500);
+				mychart.data.labels=mychart.data.labels.slice(-50);
 				//mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
 				mychart.data.datasets[0].data.push(datele.z);
-				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-500);
+				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-50);
 				mychart.update();
 				//console.log(datele);
-			},function(){},{ frequency: 100 });
-		}, 100);
+			},function(){},{ frequency: 500 });
+		}, 500);
+	},
+	getWeather: function()
+	{
+		var oras=$("#city").val();
+		var poza;
+		$.getJSON("https://www.googleapis.com/customsearch/v1?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ&cx=004800320405735125135:drr_tt3z3am&q="+oras+"&searchType=image&imgSize=medium&alt=json",function(res)
+		{
+			//console.log(res.items[0].link);
+			poza=res.items[0].link;
+			console.log(poza);
+			$.getJSON("http://api.openweathermap.org/data/2.5/weather?q="+oras+"&appid=8e459effc6168163b4eaaf8d4193f3f8",function(json)
+			{
+				var card = $("#templates>.weathercard").clone();
+				card.find(".img-container>img").attr("src",res.items[1].link);
+				card.find(".title").html(json.name); 
+				card.find(".content").html("Temperature:"+Math.floor(json.main.temp-273.15)+"°C");
+				$("#wea").append(card);
+			});
+		});
+
+		// imageSearch = new google.search.ImageSearch();
+		// imageSearch.execute(oras);
+		// var poza=imageSearch.results[0];
+		// console.log(imageSearch.results[0]);
+		
 	}
 	
 };
