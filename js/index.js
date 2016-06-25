@@ -69,7 +69,7 @@ var app = {
 			app.showPage(hash[0]);
 		}	
 		this.updateNews();
-		this.makeChart();
+		//this.makeChart();
 		this.getSettings();
 		this.getACC();
 		//this.getWeather();
@@ -83,8 +83,8 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-    	setInterval(app.updateMap, 5000);
-    	setInterval(app.chatGet, 1000);
+    	//setInterval(app.updateMap, 5000);
+    	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
     	// },5000);
@@ -332,14 +332,14 @@ var app = {
 				//var a=Math.floor(Math.random()*100);
 				//mychart.data.datasets[0].data.push(a);
 				mychart.data.labels.push(iter);
-				mychart.data.labels=mychart.data.labels.slice(-50);
+				mychart.data.labels=mychart.data.labels.slice(-20);
 				//mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-10);
 				mychart.data.datasets[0].data.push(datele.z);
-				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-50);
+				mychart.data.datasets[0].data=mychart.data.datasets[0].data.slice(-20);
 				mychart.update();
 				//console.log(datele);
-			},function(){},{ frequency: 500 });
-		}, 500);
+			},function(){},{ frequency: 1000 });
+		}, 1000);
 	},
 	getWeather: function()
 	{
