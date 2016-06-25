@@ -18,6 +18,7 @@
  */
 var iter=9;
 var imageSearch;
+var flightPlanCoordinates=[];
 google.load('search', '1');
 var test_news=[
 	{
@@ -92,6 +93,7 @@ var app = {
     	$("#colorsett>#butt2").click(app.colorSet);
     	$("#images>#butt3").click(app.Photo);
     	$("#wea>#buttcity").click(app.getWeather);
+    	$("#trip_input>#butt5").click(app.getTrip);
         document.addEventListener('deviceready', this.onDeviceReady, false);
 		window.addEventListener('hashchange', this.hashChange, false);
 		//window.addEventListener("batterystatus", onBatteryStatus, false);
@@ -345,7 +347,7 @@ var app = {
 	{
 		var oras=$("#city").val();
 		var poza;
-		$.getJSON("https://www.googleapis.com/customsearch/v1?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ&cx=004800320405735125135:drr_tt3z3am&q="+oras+"&searchType=image&imgSize=medium&alt=json",function(res)
+		$.getJSON("https://www.googleapis.com/customsearch/v1?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ&cx=004800320405735125135:drr_tt3z3am&q="+oras+"+landscape&searchType=image&imgSize=large&alt=json",function(res)
 		{
 			//console.log(res.items[0].link);
 			poza=res.items[0].link;
@@ -353,7 +355,7 @@ var app = {
 			$.getJSON("http://api.openweathermap.org/data/2.5/weather?q="+oras+"&appid=8e459effc6168163b4eaaf8d4193f3f8",function(json)
 			{
 				var card = $("#templates>.weathercard").clone();
-				card.find(".img-container>img").attr("src",res.items[1].link);
+				card.find(".img-container>img").attr("src",res.items[0].link);
 				card.find(".title").html(json.name); 
 				card.find(".content").html("Temperature:"+Math.floor(json.main.temp-273.15)+"°C");
 				$("#wea").append(card);
@@ -365,6 +367,83 @@ var app = {
 		// var poza=imageSearch.results[0];
 		// console.log(imageSearch.results[0]);
 		
+	},
+	getTrip: function()
+	{
+	var org = $("#origin").val(); //get username
+	var dest = $("#destination").val(); // get msg
+	var req=
+	{
+	  "request": {
+	    "slice": [
+	      {
+	        "origin": org,
+	        "destination": dest,
+	        "date": "2016-06-25"
+	      }
+	    ],
+	    "passengers": {
+	      "adultCount": 1,
+	      "infantInLapCount": 0,
+	      "infantInSeatCount": 0,
+	      "childCount": 0,
+	      "seniorCount": 0
+	    },
+	    "solutions": 1,
+	    "refundable": false
+	  }
+	};
+	//console.log(req);
+	$.ajax({
+     type: "POST",
+     //Set up your request URL and API Key.
+     url: "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ", 
+     contentType: 'application/json', // Set Content-type: application/json
+     dataType: 'json',
+     // The query we want from Google QPX, This will be the variable we created in the beginning
+     data: JSON.stringify(req),
+     success: function (rasp) {
+      //console.log(rasp);
+      var orase=rasp.trips.data.city;
+      for(i=0;i<orase.length;++i)
+      {
+		var mesaj = $("#templates>.mesaj").clone();
+		mesaj.find(".title").html(orase[i].name); //set .title element of the card
+		mesaj.find(".content").html(rasp.trips.data.airport[i].name); //set .content element of the card
+		$("#trip_box").append(mesaj);
+	  }
+	  var suma=rasp.trips.tripOption[0].saleTotal;
+	  $("#trip_box").append(suma);
+      //console.log(orase[0].name);
+	  //var suma=rasp.trips.tripOption[0].saleTotal;
+	  // $("#trip_box").append(suma);
+	 //  for(i=0;i<orase.length;++i)
+	 //  {
+	 //  	//console.log(orase[i].name);
+	 //  	var geocoder = new google.maps.Geocoder();
+		// if (geocoder) {
+		// 	console.log(orase[i].name);
+		//   geocoder.geocode({ 'address': orase[i].name }, function (res2, status) {
+		//      if (status == google.maps.GeocoderStatus.OK) {
+		//      	console.log(res2);
+		//         flightPlanCoordinates.push({"lat": res2[0].geometry.location.lat, "lng": res2[0].geometry.location.lng});
+		//      }
+		//      else {
+		//         console.log("Geocoding failed: " + status);
+		//      }
+		//   });
+		// }    
+	 //  			//console.log(orase[i]);
+	 //  			//flightPlanCoordinates.push({"lat": res2[0].geometry.location.lat, "lng": res2[0].geometry.location.lng});
+	 //  }
+	 //  console.log(flightPlanCoordinates);
+
+    },
+      error: function(){
+       //Error Handling for our request
+       alert("Access to Google QPX Failed.");
+     }
+    });
 	}
 	
 };

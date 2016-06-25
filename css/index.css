@@ -290,7 +290,7 @@ div.weathercard .img-container{
 	overflow:hidden;
 }
 div.weathercard .img-container:after{
-	padding-top: 56.25%;
+	padding-top: 50%;
 	/* 16:9 ratio */
 	display: block;
 	content: '';
