@@ -76,7 +76,7 @@ var app = {
 		//this.getWeather();
 
 		//this.setStatusbar();
-		
+		this.updateMap();
 		
     },
     // Bind Event Listeners
@@ -85,7 +85,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
     	//setInterval(app.updateMap, 5000);
-    	//setInterval(app.chatGet, 1000);
+    	setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
     	// },5000);
@@ -159,23 +159,27 @@ var app = {
 	var msg = $("#msg").val(); // get msg
 	// var new_div = $("<div>"+user+":"+msg+"</div>"); // create a new div
 	// $("#chat_box").append(new_div);
-	$.post('http://192.168.1.185/chat', JSON.stringify(
+	$.post('http://192.168.1.213/light', JSON.stringify(
          {username:$("#username").val(), msg:$("#msg").val()})
     );
     app.chatGet();
   	},
   	chatGet: function(){
   		$("#chat_box").html("");
-  		$.get('http://192.168.1.185/chat', function(msgs){
+  		$.get('http://192.168.1.213:8000/api', function(msgs){
   			//display msgs in some container
-  			for(i=4; i>=0; i--)
-  			{
-  				//var new_div = $("<div>"+msgs[i].u+":"+msgs[i].m+"</div>"); // create a new div
-  				var mesaj = $("#templates>.mesaj").clone();
-				mesaj.find(".title").html(msgs[i].u); //set .title element of the card
-				mesaj.find(".content").html(msgs[i].m); //set .content element of the card
-  				$("#chat_box").append(mesaj);	
-  			}
+  			console.log(msgs);
+  			var mesaj = $("#templates>.mesaj").clone();
+			mesaj.find(".title").html(msgs.temp); //set .title element of the card
+  			$("#chat_box").append(mesaj);
+  		// 	for(i=4; i>=0; i--)
+  		// 	{
+  		// 		//var new_div = $("<div>"+msgs[i].u+":"+msgs[i].m+"</div>"); // create a new div
+  		// 		var mesaj = $("#templates>.mesaj").clone();
+				// mesaj.find(".title").html(msgs[i].u); //set .title element of the card
+				// mesaj.find(".content").html(msgs[i].m); //set .content element of the card
+  		// 		$("#chat_box").append(mesaj);	
+  		// 	}
   			
 		})
 
@@ -286,16 +290,48 @@ var app = {
 	updateMap: function()
 	{
 		//console.log("Aici");
-        navigator.geolocation.getCurrentPosition(showPosition);
-    	function showPosition(pozi)
-    	{
-    		console.log(aici);
-    		var latlon = pozi.coords.latitude + "," + pozi.coords.longitude;
-			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=300x300&sensor=false";
-			console.log(img_url);
-			$("#map").append("");
-			$("#map").append("<img>"+img_url+"</img>");
-    	}
+     //    navigator.geolocation.getCurrentPosition(showPosition);
+    	// function showPosition(pozi)
+    	// {
+    	// 	console.log(aici);
+    	// 	var latlon = pozi.coords.latitude + "," + pozi.coords.longitude;
+    	// 	console.log(latlon);
+    	// }
+
+    	function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 6
+        });
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+          	console.log("aici");
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
 	},
 	getACC: function()
 	{
