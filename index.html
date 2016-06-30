@@ -13,6 +13,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://www.google.com/jsapi"></script>
 		<script src="http://maps.google.com/maps/api/js?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>IoT Template</title>
     </head>
@@ -81,6 +82,11 @@
 					    <i class="fa fa-plane"></i> Trip
 					  </a>
 					</li>
+					<li>
+					  <a href="#rasp">
+					    <i class="fa fa-rebel" aria-hidden="true"></i> Raspberry
+					  </a>
+					</li>
 					
 
 
@@ -147,7 +153,7 @@
 					<button class="btn raised " id="buttcity">Search</button>
 				</div>
 				<div data-role="page" id="trip">
-					Chat
+					Trip
 					<div id="trip_input">
 						<input type="text" id="origin">
 						<br>
@@ -156,7 +162,13 @@
 					</div>
 					<div id="trip_box">
 					</div>
-					
+				</div>
+				<div data-role="page" id="rasp">
+					Raspberry
+					<button class="btn raised " id="butttemp">Temperatura</button>
+				    <button class="btn raised " id="buttlum">Luminozitate</button>
+				    <button class="btn raised " id="buttled">Aprinde</button>
+				    <div id="chart_div"></div>
 				</div>
 				<div data-role="page" id="templates">
 					Templates

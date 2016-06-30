@@ -19,6 +19,9 @@
 var iter=9;
 var imageSearch;
 var flightPlanCoordinates=[];
+var onoff=0;
+var tmp;
+var lum;
 google.load('search', '1');
 var test_news=[
 	{
@@ -59,6 +62,7 @@ var app = {
     	//this.makeChart();
     	
         this.bindEvents();
+        this.startDash();
 		$("*[data-action=close-menu]").click(app.hideMenu);
 		$("*[data-action=show-menu]").click(app.showMenu);
 		$("*[data-action=toggle-menu]").click(app.toggleMenu);
@@ -85,10 +89,13 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
     	//setInterval(app.updateMap, 5000);
-    	setInterval(app.chatGet, 1000);
+    	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
     	// },5000);
+		$("#butttemp").click(app.ShowTemp);
+		$("#buttlum").click(app.ShowLum);
+		$("#buttled").click(app.Led);
     	$("#chat_controls>#butt1").click(app.chatSend);
     	$("#colorsett>#butt2").click(app.colorSet);
     	$("#images>#butt3").click(app.Photo);
@@ -306,8 +313,6 @@ var app = {
         var infoWindow = new google.maps.InfoWindow({map: map});
 
         // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
           	console.log("aici");
             var pos = {
               lat: position.coords.latitude,
@@ -317,21 +322,7 @@ var app = {
             infoWindow.setPosition(pos);
             infoWindow.setContent('Location found.');
             map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
         }
-      }
-
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-      }
 	},
 	getACC: function()
 	{
@@ -404,6 +395,107 @@ var app = {
 		// console.log(imageSearch.results[0]);
 		
 	},
+	
+	startDash: function()
+	{
+		google.charts.load ('current', {'packages':['gauge']});
+	},
+
+	Led: function()
+	{
+		++onoff;
+		onoff%=2;
+		if(onoff==1)
+		{
+		  var apr=
+		  {
+		    'apr':1
+		  }
+		}
+		else
+		var apr=
+		{
+		  'apr':0
+		}
+		$.post('http://192.168.1.213/ceva',apr);
+	},
+
+	ShowTemp: function()
+	{
+		$("#chart_div").append("");
+		var chartData = null;
+		var chart =null;
+		var options=
+		{
+		  width:400,
+		  height:120,
+		  redFrom:50,
+		  redTo:100,
+		  yellowFrom:25,
+		  yellowTo:50,
+		  max: 100
+		};
+
+		google.charts.setOnLoadCallback(drawChart);
+		function drawChart()
+		{
+		  chartData=google.visualization.arrayToDataTable([['Label','Value'],['°C',0]]);
+		  chart=new google.visualization.Gauge(document.getElementById('chart_div'));
+		  chart.draw(chartData, options);
+		}
+		setInterval(getTemp,1000);
+		function getTemp()
+		{
+			console.log("Temp")
+			$.getJSON("http://192.168.1.213/phone",function(res)
+			{
+				console.log(res.temp)
+				tmp=res.temp;
+				chartData.setValue(0,1,tmp);
+				chart.draw(chartData, options);
+			});
+		}
+
+	},
+
+	ShowLum: function()
+	{
+		$("#chart_div").append("");
+		var chartData = null;
+		var chart =null;
+		var options=
+		{
+		  width:400,
+		  height:120,
+		  redFrom:800,
+		  redTo:1023,
+		  yellowFrom:200,
+		  yellowTo:800,
+		  max: 1023
+		};
+
+		//google.charts.load ('current', {'packages':['gauge']});
+		google.charts.setOnLoadCallback(drawChart);
+		function drawChart()
+		{
+		  chartData=google.visualization.arrayToDataTable([['Label','Value'],['lucsi-ish',0]]);
+		  chart=new google.visualization.Gauge(document.getElementById('chart_div'));
+		  chart.draw(chartData, options);
+		}
+		setInterval(getLum,1000);
+		function getLum()
+		{
+			console.log("Temp")
+			$.getJSON("http://192.168.1.213/phone",function(res)
+			{
+				console.log(res.lum)
+				lum=res.lum;
+				chartData.setValue(0,1,lum);
+				chart.draw(chartData, options);
+			});
+		}
+	},
+
 	getTrip: function()
 	{
 	var org = $("#origin").val(); //get username
