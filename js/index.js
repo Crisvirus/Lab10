@@ -94,6 +94,11 @@ var app = {
     	// 	navigator.vibrate(1000);
     	// },5000);
 		$("#butttemp").click(app.ShowTemp);
+		$("#clearall").click(function()
+			{
+				console.log("aici")
+				$("#wea>#weacards").html("");
+			});
 		$("#buttlum").click(app.ShowLum);
 		$("#buttled").click(app.Led);
     	$("#chat_controls>#butt1").click(app.chatSend);
@@ -385,7 +390,7 @@ var app = {
 				card.find(".img-container>img").attr("src",res.items[0].link);
 				card.find(".title").html(json.name); 
 				card.find(".content").html("Temperature:"+Math.floor(json.main.temp-273.15)+"°C");
-				$("#wea").append(card);
+				$("#weacards").append(card);
 			});
 		});
 
@@ -394,6 +399,16 @@ var app = {
 		// var poza=imageSearch.results[0];
 		// console.log(imageSearch.results[0]);
 		
+	},
+	addSwipe: function()
+	{
+		$(document).on("pagecreate","#wea",function()
+		{
+		  $("div.weathercard").on("swipe",function()
+		  {
+		    $(this).hide();
+		  });
+		});
 	},
 	
 	startDash: function()

@@ -14,6 +14,8 @@
 		<script src="https://www.google.com/jsapi"></script>
 		<script src="http://maps.google.com/maps/api/js?key=AIzaSyBriptHm8-Tc0gjfsrM0FgD626h8Ve13iQ"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>IoT Template</title>
     </head>
@@ -126,7 +128,7 @@
 					</canvas>
 				</div>
 				<div data-role="page" id="batt">
-					Battery
+					<h1>Battery</h1>
 				</div>
 				<div data-role="page" id="sett">
 					Settings
@@ -147,10 +149,12 @@
 				</div>
 				<div data-role="page" id="wea">
 					<h1>Weather</h1>
+					<a class="btn raised" id="clearall">Clear all <i class="fa fa-trash-o" aria-hidden="true"></i></a>
 					<br>
 					Enter city
 					<input type="text" id="city">
 					<button class="btn raised " id="buttcity">Search</button>
+					<div id="weacards"></div>
 				</div>
 				<div data-role="page" id="trip">
 					Trip
