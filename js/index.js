@@ -390,6 +390,17 @@ var app = {
 				card.find(".img-container>img").attr("src",res.items[0].link);
 				card.find(".title").html(json.name); 
 				card.find(".content").html("Temperature:"+Math.floor(json.main.temp-273.15)+"°C");
+				card.find(".btn.sters").click(function()
+				{
+					console.log("aici");
+					$(this).parents(".weathercard").remove();
+				});
+				card.find(".img-container").swipe(function()
+				{
+					console.log("aici");
+					$(this).parents(".weathercard").remove();
+				});
+				
 				$("#weacards").append(card);
 			});
 		});
