@@ -88,7 +88,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-    	setInterval(app.wakeup, 1000);
+    	setInterval(app.wakeup, 5000);
     	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
@@ -518,7 +518,11 @@ var app = {
 				var ok=res.ok;
 				if(ok==1) 
 				{
-					navigator.vibrate(2000);
+					navigator.vibrate(5000);
+				}
+				else
+				{
+					navigator.vibrate(0);
 				}
 			});
 	},
