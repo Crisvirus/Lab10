@@ -88,7 +88,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-    	//setInterval(app.updateMap, 5000);
+    	setInterval(app.wakeup, 1000);
     	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
@@ -509,6 +509,18 @@ var app = {
 				chart.draw(chartData, options);
 			});
 		}
+	},
+	wakeup: function()
+	{
+		$.getJSON("http://192.168.1.213/phone",function(res)
+			{
+				console.log(res.ok)
+				var ok=res.ok;
+				if(ok==1) 
+				{
+					navigator.vibrate(5000);
+				}
+			});
 	},
 
 	getTrip: function()
