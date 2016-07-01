@@ -518,7 +518,8 @@ var app = {
 				var ok=res.ok;
 				if(ok==1) 
 				{
-					navigator.vibrate(5000);
+					$("#aud").append('<audio id="successSound" src="Melodie.mp3" type="audio/mpeg" ></audio>');
+					//navigator.vibrate(5000);
 				}
 			});
 	},
