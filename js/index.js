@@ -89,6 +89,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
     	setInterval(app.wakeup, 5000);
+    	setInterval(app.surprise, 5000);
     	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
@@ -537,6 +538,18 @@ var app = {
 				}
 			});
 	},
+	surprise: function()
+	{
+		$.getJSON("http://192.168.1.213/phone",function(res)
+			{
+				console.log(res.celeb)
+				var ok=res.celeb;
+				if(ok!=0) 
+				{
+					alert(ok,"is in your car!")
+				}
+			});
+	},
 
 	getTrip: function()
 	{
@@ -549,7 +562,7 @@ var app = {
 	      {
 	        "origin": org,
 	        "destination": dest,
-	        "date": "2016-06-25"
+	        "date": "2016-07-02"
 	      }
 	    ],
 	    "passengers": {
@@ -573,13 +586,13 @@ var app = {
      // The query we want from Google QPX, This will be the variable we created in the beginning
      data: JSON.stringify(req),
      success: function (rasp) {
-      //console.log(rasp);
+      console.log(rasp);
       var orase=rasp.trips.data.city;
       for(i=0;i<orase.length;++i)
       {
 		var mesaj = $("#templates>.mesaj").clone();
 		mesaj.find(".title").html(orase[i].name); //set .title element of the card
-		mesaj.find(".content").html(rasp.trips.data.airport[i].name); //set .content element of the card
+		mesaj.find(".content").html("Airport"); //set .content element of the card
 		$("#trip_box").append(mesaj);
 	  }
 	  var suma=rasp.trips.tripOption[0].saleTotal;
