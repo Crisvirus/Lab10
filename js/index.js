@@ -285,17 +285,57 @@ var app = {
 		var col=localStorage.getItem('BGC');
 		$("body").css("backgroundColor", col);
 	},
-	Photo: function(){
-		//alert("Buton apasat");
-		alert(navigator.camera);
-		navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-	    destinationType: Camera.DestinationType.FILE_URI });
+	Photo: function()
+	{
+	//alert("Buton apasat");
+	//alert(navigator.camera);
+	// navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+ //    destinationType: Camera.DestinationType.FILE_URI });
+	// function onSuccess(imageURI) 
+	// {
+	   	//$("#image").append("<img>"+imageURI+"</img>");
+	   	var req=
+	   	{
+	   		'url':'https://upload.wikimedia.org/wikipedia/commons/0/03/Bruce_Willis_by_Gage_Skidmore.jpg'
+	   	}
+	   	$.ajax(
+	   	{
+			type: "POST",
+			//Set up your request URL and API Key.
+			url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
+			headers: 
+			{
+		        'Content-Type':'application/json',
+		       	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
+		    },
 
-	function onSuccess(imageURI) {
-	   	$("#image").append("<img>"+imageURI+"</img>");
-	}
+			// The query we want from Google QPX, This will be the variable we created in the beginning
+			data: JSON.stringify(req),
+			success: function (rasp) 
+			{
+				console.log(rasp.description.captions[0].text);
+				var img = new Image;
+				img.src = 'image.jpg';
+				var myCanvas = document.getElementById('my_canvas');
+				var ctx = myCanvas.getContext('2d');
+				img.onload = function()
+				{
+					ctx.drawImage(img,0,0); // Or at whatever offset you like
+				};
+				// var orase=rasp.trips.data.city;
+				// for(i=0;i<orase.length;++i)
+				// {
+				// 	var mesaj = $("#templates>.mesaj").clone();
+				// 	mesaj.find(".title").html(orase[i].name); //set .title element of the card
+				// 	mesaj.find(".content").html("Airport"); //set .content element of the card
+				// 	$("#trip_box").append(mesaj);
+				// }
+			}
+		});
+	//}
 
-	function onFail(message) {
+	function onFail(message) 
+	{
 	    alert('Failed because: ' + message);
 	}
 	},
