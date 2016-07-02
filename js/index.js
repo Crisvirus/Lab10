@@ -293,11 +293,15 @@ var app = {
  //    destinationType: Camera.DestinationType.FILE_URI });
 	// function onSuccess(imageURI) 
 	// {
-	   	//$("#image").append("<img>"+imageURI+"</img>");
-	   	var req=
-	   	{
-	   		'url':'https://upload.wikimedia.org/wikipedia/commons/0/03/Bruce_Willis_by_Gage_Skidmore.jpg'
-	   	}
+
+		var can = document.getElementById("imgCanvas");
+		var img = new Image();
+		img.setAttribute('crossOrigin', 'anonymous');
+		img.src = "https://upload.wikimedia.org/wikipedia/commons/0/03/Bruce_Willis_by_Gage_Skidmore.jpg";
+		var ctx = can.getContext("2d");
+		ctx.drawImage(img, 10, 10);
+		var encodedBase = can.toDataURL();
+		console.log(encodedBase.length);
 	   	$.ajax(
 	   	{
 			type: "POST",
@@ -305,23 +309,15 @@ var app = {
 			url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
 			headers: 
 			{
-		        'Content-Type':'application/json',
+		        'Content-Type':'application/octet-stream',
 		       	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
 		    },
 
 			// The query we want from Google QPX, This will be the variable we created in the beginning
-			data: JSON.stringify(req),
+			data: encodedBase,
 			success: function (rasp) 
 			{
 				console.log(rasp.description.captions[0].text);
-				var img = new Image;
-				img.src = 'image.jpg';
-				var myCanvas = document.getElementById('my_canvas');
-				var ctx = myCanvas.getContext('2d');
-				img.onload = function()
-				{
-					ctx.drawImage(img,0,0); // Or at whatever offset you like
-				};
 				// var orase=rasp.trips.data.city;
 				// for(i=0;i<orase.length;++i)
 				// {
