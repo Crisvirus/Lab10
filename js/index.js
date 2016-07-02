@@ -89,7 +89,6 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
     	setInterval(app.wakeup, 5000);
-    	setInterval(app.surprise, 5000);
     	//setInterval(app.chatGet, 1000);
     	// setInterval(function(){
     	// 	navigator.vibrate(1000);
@@ -535,18 +534,6 @@ var app = {
 				else
 				{
 					navigator.vibrate(0);
-				}
-			});
-	},
-	surprise: function()
-	{
-		$.getJSON("http://192.168.1.213/phone",function(res)
-			{
-				console.log(res.celeb)
-				var ok=res.celeb;
-				if(ok!=0) 
-				{
-					alert(ok,"is in your car!")
 				}
 			});
 	},
