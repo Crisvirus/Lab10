@@ -289,46 +289,73 @@ var app = {
 	{
 	//alert("Buton apasat");
 	//alert(navigator.camera);
-	// navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
- //    destinationType: Camera.DestinationType.FILE_URI });
-	// function onSuccess(imageURI) 
-	// {
-
-		var can = document.getElementById("imgCanvas");
-		var img = new Image();
-		img.setAttribute('crossOrigin', 'anonymous');
-		img.src = "https://upload.wikimedia.org/wikipedia/commons/0/03/Bruce_Willis_by_Gage_Skidmore.jpg";
-		var ctx = can.getContext("2d");
-		ctx.drawImage(img, 10, 10);
-		var encodedBase = can.toDataURL();
-		console.log(encodedBase.length);
-	   	$.ajax(
-	   	{
-			type: "POST",
-			//Set up your request URL and API Key.
-			url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
-			headers: 
-			{
-		        'Content-Type':'application/octet-stream',
-		       	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
-		    },
-
-			// The query we want from Google QPX, This will be the variable we created in the beginning
-			data: encodedBase,
-			success: function (rasp) 
-			{
-				console.log(rasp.description.captions[0].text);
-				// var orase=rasp.trips.data.city;
-				// for(i=0;i<orase.length;++i)
-				// {
-				// 	var mesaj = $("#templates>.mesaj").clone();
-				// 	mesaj.find(".title").html(orase[i].name); //set .title element of the card
-				// 	mesaj.find(".content").html("Airport"); //set .content element of the card
-				// 	$("#trip_box").append(mesaj);
-				// }
-			}
-		});
-	//}
+	navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+    destinationType: Camera.DestinationType.FILE_URI });
+	function onSuccess(imageURI) 
+	{
+		var uploadURI = 'https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities';
+		var imageURI = imageURI; // the retrieved URI of the file on the file system, e.g. using navigator.camera.getPicture()     
+	    var options = new FileUploadOptions();
+	    options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+	    options.mimeType = "application/octet-stream";
+	    options.headers = 
+	    {
+	    	'Content-Type':'application/octet-stream',
+			'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
+	    }; // use this if you need additional headers
+	 
+	    var ft = new FileTransfer();
+	    ft.upload(imageURI, uploadURI, function(rasp) 
+	    {
+	        alert(rasp.description.captions[0].text);
+	    }, 
+	    function(error) 
+	    {
+	        alert("An error has occurred:" + JSON.stringify(error));
+	    }, options);
+		// var can = document.getElementById("imgCanvas");
+		// var img = new Image();
+		// img.setAttribute('crossOrigin', 'anonymous');
+		// img.src = "https://upload.wikimedia.org/wikipedia/commons/0/03/Bruce_Willis_by_Gage_Skidmore.jpg";
+		// var ctx = can.getContext("2d");
+		// ctx.drawImage(img, 10, 10);
+		// var encodedBase = can.toDataURL();
+		
+		// var req=
+		// {
+		// 	encodedBase
+		// }
+		// console.log(req);
+	 //   	$.ajax(
+	 //   	{
+		// 	type: "POST",
+		// 	//Set up your request URL and API Key.
+		// 	url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
+		// 	headers: 
+		// 	{
+		//         'Content-Type':'application/octet-stream',
+		//        	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
+		//     },
+		//     data:req,
+		// 	// The query we want from Google QPX, This will be the variable we created in the beginning
+		// 	success: function (rasp) 
+		// 	{
+		// 		console.log(rasp.description.captions[0].text);
+		// 		// var orase=rasp.trips.data.city;
+		// 		// for(i=0;i<orase.length;++i)
+		// 		// {
+		// 		// 	var mesaj = $("#templates>.mesaj").clone();
+		// 		// 	mesaj.find(".title").html(orase[i].name); //set .title element of the card
+		// 		// 	mesaj.find(".content").html("Airport"); //set .content element of the card
+		// 		// 	$("#trip_box").append(mesaj);
+		// 		// }
+		// 	},
+		// 	error: function (rasp)
+		// 	{
+		// 		console.log(rasp);
+		// 	}
+		// });
+	}
 
 	function onFail(message) 
 	{
