@@ -94,6 +94,7 @@ var app = {
     	// 	navigator.vibrate(1000);
     	// },5000);
 		$("#butttemp").click(app.ShowTemp);
+		$("#buttwiki").click(app.getWiki);
 		$("#clearall").click(function()
 			{
 				console.log("aici")
@@ -589,6 +590,13 @@ var app = {
 				{
 					navigator.vibrate(0);
 				}
+			});
+	},
+	getWiki: function()
+	{
+		$.get("https://en.wikipedia.org/wiki/Romania", function(pag)
+			{
+				$("#wiki").append(pag);
 			});
 	},
 
