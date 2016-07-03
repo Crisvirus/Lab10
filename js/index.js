@@ -289,11 +289,11 @@ var app = {
 	{
 	//alert("Buton apasat");
 	//alert(navigator.camera);
-	navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-    destinationType: Camera.DestinationType.DATA_URL
-	});
-	function onSuccess(imageData) 
-	{
+	// navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+ //    destinationType: Camera.DestinationType.DATA_URL
+	// });
+	// function onSuccess(imageData) 
+	// {
 
 		// var can = document.getElementById("imgCanvas");
 		// var img = new Image();
@@ -307,37 +307,46 @@ var app = {
 		// {
 		// 	encodedBase
 		// }
-		alert(imageData);
-	   	$.ajax(
-	   	{
-			type: "POST",
-			//Set up your request URL and API Key.
-			url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
-			headers: 
-			{
-		        'Content-Type':'application/octet-stream',
-		       	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
-		    },
-		    data:imageData,
-			// The query we want from Google QPX, This will be the variable we created in the beginning
-			success: function (rasp) 
-			{
-				alert(rasp.description.captions[0].text);
-				// var orase=rasp.trips.data.city;
-				// for(i=0;i<orase.length;++i)
-				// {
-				// 	var mesaj = $("#templates>.mesaj").clone();
-				// 	mesaj.find(".title").html(orase[i].name); //set .title element of the card
-				// 	mesaj.find(".content").html("Airport"); //set .content element of the card
-				// 	$("#trip_box").append(mesaj);
-				// }
-			},
-			error: function (rasp)
-			{
-				console.log(rasp);
-			}
-		});
+	//console.log(rasp);
+	var url=$("#url").val();
+	console.log(url)
+	var req=
+	{
+		"url":url
 	}
+   	$.ajax(
+   	{
+		type: "POST",
+		//Set up your request URL and API Key.
+		url: "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=Categories,Description&details=Celebrities", 
+		headers: 
+		{
+	        'Content-Type':'application/json',
+	       	'Ocp-Apim-Subscription-Key':"e5e0ae35d1164826ac0bc4f396514bbb"
+	    },
+	    data: JSON.stringify(req),
+		// The query we want from Google QPX, This will be the variable we created in the beginning
+		success: function (rasp) 
+		{
+			$("#Raspuns").html("");
+			$("#Raspuns").append("<h1>"+rasp.description.captions[0].text+"</h1>");
+			//alert(rasp.description.captions[0].text);
+			// var orase=rasp.trips.data.city;
+			// for(i=0;i<orase.length;++i)
+			// {
+			// 	var mesaj = $("#templates>.mesaj").clone();
+			// 	mesaj.find(".title").html(orase[i].name); //set .title element of the card
+			// 	mesaj.find(".content").html("Airport"); //set .content element of the card
+			// 	$("#trip_box").append(mesaj);
+			// }
+		},
+		error: function (rasp)
+		{
+			console.log(rasp);
+		}
+	});
+		
+	//}
 
 	function onFail(message) 
 	{
