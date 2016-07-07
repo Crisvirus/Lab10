@@ -498,7 +498,7 @@ var app = {
 		{
 		  'apr':0
 		}
-		$.post('http://192.168.1.213/ceva',apr);
+		$.post('http://31.5.99.237/ceva',apr);
 	},
 
 	ShowTemp: function()
