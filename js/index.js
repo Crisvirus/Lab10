@@ -626,23 +626,35 @@ var app = {
 	},
 	getLoad: function()
 	{
+		$("#load_box").html("");
 		// // var xhr = app.createCORSRequest('GET', "http://46.97.4.114:2626/api/viewer-loads/520");
 		// //console.log(xhr);
-		// $.getJSON("http://46.97.4.114:2626/api/viewer-loads/5226",function(res)
-		// 	{
-		// 		console.log("aici");
-		// 	});
-		$.ajax({
-		   type: 'GET',
-		   url:'http://46.97.4.114:2626/api/viewer-loads/5226/?format=json',
-		   dataType: "text",
-		   success: function(data){
-		      $("#load").append(data);
-		   },
-		   error: function(jqXHR, textStatus, errorThrown) {
-		      // error_fn(jqXHR, textStatus, errorThrown);
-		   }
-		});
+		$.getJSON("http://46.97.4.114:2626/api/viewer-loads/",function(res1)
+		{
+			if(id)
+			{
+				var id=res1[2].id;
+				$.getJSON("http://46.97.4.114:2626/api/viewer-loads/"+id,function(res)
+				{
+					console.log(res.spots[0]);
+					for(i=0;i<9;++i)
+					{
+						var mesaj = $("#templates>.mesaj").clone();
+						mesaj.find(".title").html(res.spots[i].person_name); //set .title element of the card
+						mesaj.find(".content").html(res.spots[i].item_name); //set .content element of the card
+						$("#load_box").append(mesaj);
+					}
+					
+				});
+			}
+			else
+			{
+				var mesaj = $("#templates>.mesaj").clone();
+				mesaj.find(".title").html("NO LOADS"); //set .title element of the card
+				mesaj.find(".content").html("NO LOADS"); //set .content element of the card
+				$("#load_box").append(mesaj);
+			}
+		});	
 	},
 
 	getTrip: function()
