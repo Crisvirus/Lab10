@@ -56,6 +56,7 @@ var test_news=[
 	}
 ];
 var date=[0];
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -76,7 +77,7 @@ var app = {
 		this.updateNews();
 		//this.makeChart();
 		this.getSettings();
-		this.getACC();
+		//this.getACC();
 		//this.getWeather();
 
 		//this.setStatusbar();
@@ -101,6 +102,7 @@ var app = {
 				$("#wea>#weacards").html("");
 			});
 		$("#buttlum").click(app.ShowLum);
+		$("#buttload").click(app.getLoad);
 		$("#buttled").click(app.Led);
     	$("#chat_controls>#butt1").click(app.chatSend);
     	$("#colorsett>#butt2").click(app.colorSet);
@@ -214,6 +216,29 @@ var app = {
 				});
 		$("#news").append(card); //add card to page
 		}
+	},
+	createCORSRequest: function (method, url) {
+	  var xhr = new XMLHttpRequest();
+	  if ("withCredentials" in xhr) {
+
+	    // Check if the XMLHttpRequest object has a "withCredentials" property.
+	    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+	    xhr.open(method, url, true);
+
+	  } else if (typeof XDomainRequest != "undefined") {
+
+	    // Otherwise, check if XDomainRequest.
+	    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+	    xhr = new XDomainRequest();
+	    xhr.open(method, url);
+
+	  } else {
+
+	    // Otherwise, CORS is not supported by the browser.
+	    xhr = null;
+
+	  }
+	  return xhr;
 	},
 	addData: function(){
 		iter=iter+1;
@@ -598,6 +623,26 @@ var app = {
 			{
 				$("#wiki").append(pag);
 			});
+	},
+	getLoad: function()
+	{
+		// // var xhr = app.createCORSRequest('GET', "http://46.97.4.114:2626/api/viewer-loads/520");
+		// //console.log(xhr);
+		// $.getJSON("http://46.97.4.114:2626/api/viewer-loads/5226",function(res)
+		// 	{
+		// 		console.log("aici");
+		// 	});
+		$.ajax({
+		   type: 'GET',
+		   url:'http://46.97.4.114:2626/api/viewer-loads/5226/?format=json',
+		   dataType: "text",
+		   success: function(data){
+		      $("#load").append(data);
+		   },
+		   error: function(jqXHR, textStatus, errorThrown) {
+		      // error_fn(jqXHR, textStatus, errorThrown);
+		   }
+		});
 	},
 
 	getTrip: function()
