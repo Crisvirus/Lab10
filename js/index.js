@@ -631,9 +631,11 @@ var app = {
 		// //console.log(xhr);
 		$.getJSON("http://46.97.4.114:2626/api/viewer-loads/",function(res1)
 		{
-			if(id)
+			
+			if(res1[2])
 			{
 				var id=res1[2].id;
+				console.log(id);
 				$.getJSON("http://46.97.4.114:2626/api/viewer-loads/"+id,function(res)
 				{
 					console.log(res.spots[0]);
