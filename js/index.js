@@ -102,6 +102,7 @@ var app = {
 				$("#wea>#weacards").html("");
 			});
 		$("#buttlum").click(app.ShowLum);
+		$("#buttmap").click(app.getMap);
 		$("#buttload").click(app.getLoad);
 		$("#buttled").click(app.Led);
     	$("#chat_controls>#butt1").click(app.chatSend);
@@ -198,6 +199,23 @@ var app = {
   			
 		})
 
+  	},
+  	getMap: function(){
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: {lat: 44.426814, lng: 26.102452},
+          zoom: 11
+        });
+        setInterval(function(){
+        	$.getJSON("http://192.168.10.105:3000",function(res){
+  			console.log(res);
+        	var marker = new google.maps.Marker({
+	          position: res,
+	          map: map,
+	          title: 'Hello World!'
+	        });
+    	});
+    	}, 5000);
+  		
   	},
   	updateNews: function(){
 		var news = test_news;
