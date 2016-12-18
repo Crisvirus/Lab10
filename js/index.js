@@ -205,13 +205,14 @@ var app = {
           center: {lat: 44.426814, lng: 26.102452},
           zoom: 11
         });
+        var marker;
         setInterval(function(){
-        	$.getJSON("http://192.168.10.105:3000",function(res){
+        	$.getJSON("http://31.5.99.237:3000",function(res){
   			console.log(res);
-        	var marker = new google.maps.Marker({
-	          position: res,
-	          map: map,
-	          title: 'Hello World!'
+  		   		marker = new google.maps.Marker({
+	          	position: res,
+	          	map: map,
+	          	title: 'Hello World!'
 	        });
     	});
     	}, 5000);
